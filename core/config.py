@@ -19,9 +19,12 @@ class Settings(BaseSettings):
     @property
     def BRAIN_DIR(self) -> str:
         import os
-        from pathlib import Path
-        # Fallback to the hardcoded one if env is not set, but try to be smart
-        default_path = r"C:\Users\user\.gemini\antigravity\brain\3e04d644-759d-4358-9068-db1f5cc39b41"
-        return os.environ.get("BRAIN_DIR", default_path)
+        # Prioritize local assets folder for production
+        assets_path = os.path.join(os.getcwd(), "assets")
+        if os.path.exists(assets_path):
+            return assets_path
+            
+        # Fallback for development
+        return os.environ.get("BRAIN_DIR", r"C:\Users\user\.gemini\antigravity\brain\3e04d644-759d-4358-9068-db1f5cc39b41")
 
 settings = Settings()

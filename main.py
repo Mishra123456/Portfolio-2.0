@@ -34,30 +34,16 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.include_router(contact.router, prefix=f"{settings.API_V1_STR}/contact", tags=["Contact"])
 app.include_router(telemetry.router, prefix=f"{settings.API_V1_STR}/telemetry", tags=["Telemetry"])
 
-# Mount artifacts directory for AI generated images
-brain_dir = pathlib.Path(settings.BRAIN_DIR).resolve()
-print(f"Mounting assets from: {brain_dir}")
-app.mount("/assets", StaticFiles(directory=str(brain_dir)), name="assets")
+# Ensure templates directory is absolute for Vercel
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+templates = Jinja2Templates(directory=BASE_DIR)
 
-# Ensure templates directory is current directory
-templates = Jinja2Templates(directory=".")
-
-@app.get("/sync-assets")
-async def sync_assets():
-    """Emergency asset synchronization for Vercel deployment."""
-    source_dir = settings.BRAIN_DIR
-    target_dir = os.path.join(os.getcwd(), "assets")
-    
-    if not os.path.exists(target_dir):
-        os.makedirs(target_dir)
-    
-    synced = []
-    for file in os.listdir(source_dir):
-        if file.endswith(".png"):
-            shutil.copy(os.path.join(source_dir, file), os.path.join(target_dir, file))
-            synced.append(file)
-            
-    return {"status": "success", "message": f"Synced {len(synced)} images to local assets folder", "files": synced}
+# Dynamic Asset Mounting
+production_assets = os.path.join(BASE_DIR, "assets")
+if os.path.exists(production_assets):
+    app.mount("/assets", StaticFiles(directory=production_assets), name="assets")
+else:
+    app.mount("/assets", StaticFiles(directory=str(settings.BRAIN_DIR)), name="assets")
 
 @app.get("/", response_class=HTMLResponse)
 async def serve_frontend(request: Request):
