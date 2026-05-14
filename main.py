@@ -15,9 +15,12 @@ import shutil
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Initialize DB
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    # Initialize DB (Safe for Serverless)
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+    except Exception as e:
+        print(f"Database initialization skipped or failed: {e}")
     yield
     await engine.dispose()
 

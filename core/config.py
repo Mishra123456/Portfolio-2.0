@@ -1,9 +1,15 @@
+import os
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Portfolio Backend"
     API_V1_STR: str = "/api/v1"
-    DATABASE_URL: str = "sqlite+aiosqlite:///./portfolio.db"
+    # Database Settings - Use /tmp on Vercel for write access
+    @property
+    def DATABASE_URL(self) -> str:
+        if os.environ.get("VERCEL"):
+            return "sqlite+aiosqlite:////tmp/portfolio.db"
+        return "sqlite+aiosqlite:///./portfolio.db"
     
     # SMTP Settings for Gmail
     SMTP_SERVER: str = "smtp.gmail.com"
