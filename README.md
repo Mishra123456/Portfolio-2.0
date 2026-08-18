@@ -12,12 +12,29 @@ The "Neural Universe" is a tactile, interactive digital identity. It features a 
 - **Deployment**: Vercel-ready Serverless Architecture
 - **Infrastructure**: Formspree (Stateless Contact), SQLite (Local Telemetry)
 
-## ✨ Elite Features
-- **Neural Sync Sequence**: Cinematic initial loading sequence for data-link authentication.
-- **Magnetic 3D UI**: Perspective-mapped cards and buttons that respond to cursor proximity.
-- **Neural Terminal**: A functional live emulator for status checks and system interaction.
-- **Deep-Tech Modals**: AI-generated architecture diagrams and technical deep-dives for every project.
-- **Real-Time Telemetry**: Persistent session tracking and system health monitoring in the footer.
+## ✨ Elite Features & Recent Upgrades (v4.0.1)
+
+### 🌌 8K Cinematic Neural Matrix Hero Background
+- **3D Neural Mesh**: Ultra-HD obsidian space background featuring glowing orange synaptic nodes and data streams.
+- **Visual Contrast Engine**: Dual-layer dark radial vignette (`bg-radial-gradient`) for pristine typography legibility and zero visual clutter.
+
+### 🎯 Refined Card Animation & Haptic Click Engine
+- **Tactile Click Physics**: Replaced harsh 3D perspective distortion with sleek 3° micro-tilts, press-down compression (`scale(0.97)`), and active ripple waves.
+- **Neon Ring Pulses**: Dynamic orange neon glow rings (`0 0 25px rgba(236,91,19,0.35)`) on card hover and press states.
+
+### 💻 Crisp Blur-Free Terminal Interface
+- **Anti-Blur Rendering**: Removed all `backdrop-filter: blur` artifacts across `.terminal-bg`, `#terminal-output`, and `.terminal-input`.
+- **Typing Focus Auto-Fade**: Neural cursor dynamically conceals when focused in `#terminal-input` to prevent text overlay obstruction.
+
+### 🖼️ Real-World Project UI Dashboards
+- **TrustScope**: Integrated real NLP Fairness & Bias Monitor UI preview with anomaly scatter plots and cohort trust metrics.
+- **DegradX**: Integrated industrial Machine Health Analysis UI preview featuring cycle degradation curves and RUL metrics.
+- **Emotion AI**: Integrated MoodCraft AI Wallpaper generator UI screenshot with emotion-driven procedural wallpapers.
+
+### 🎨 Theme-Aligned Dark Glass Action Buttons
+- **Get In Touch Capsule**: Styled with dark glass backdrop (`bg-black/40 backdrop-blur-md`), primary orange icon, and haptic neon hover states.
+
+---
 
 ## 📦 Installation & Local Development
 1. **Clone the Repository**:
