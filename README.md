@@ -31,8 +31,10 @@ The "Neural Universe" is a tactile, interactive digital identity. It features a 
 - **DegradX**: Integrated industrial Machine Health Analysis UI preview featuring cycle degradation curves and RUL metrics.
 - **Emotion AI**: Integrated MoodCraft AI Wallpaper generator UI screenshot with emotion-driven procedural wallpapers.
 
-### 🎨 Theme-Aligned Dark Glass Action Buttons
-- **Get In Touch Capsule**: Styled with dark glass backdrop (`bg-black/40 backdrop-blur-md`), primary orange icon, and haptic neon hover states.
+### 🔗 Live Production Deployments
+- **TrustScope**: [ai-trust-insights-new.vercel.app](https://ai-trust-insights-new.vercel.app/)
+- **DegradX**: [degradix-health-hub-main-puea.vercel.app](https://degradix-health-hub-main-puea.vercel.app/)
+- **Emotion AI**: [emotion-wallpaper-tbmw.vercel.app](https://emotion-wallpaper-tbmw.vercel.app/)
 
 ---
 
