@@ -33,21 +33,105 @@
 <style>
         :root { --primary: #ec5b13; --background-dark: #221610; }
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48; }
-        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(236, 91, 19, 0.1); }
+        .glass-card { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(236, 91, 19, 0.15); }
         .terminal-bg { background: #1a110c; color: #0bda7a; font-family: monospace; }
+        
+        /* Terminal Refinement & Blur Removal */
+        .terminal-bg, .terminal-bg *, .terminal-input, #terminal-output {
+            backdrop-filter: none !important;
+            filter: none !important;
+            text-shadow: none !important;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .terminal-input,
+        #terminal-input,
+        .terminal-input:focus,
+        #terminal-input:focus,
+        .terminal-input:active,
+        #terminal-input:active,
+        .terminal-input:hover { 
+            background: transparent !important; 
+            background-color: transparent !important;
+            border: 0 !important; 
+            border-style: none !important;
+            outline: none !important; 
+            box-shadow: none !important;
+            --tw-ring-color: transparent !important;
+            --tw-ring-shadow: none !important;
+            --tw-shadow: none !important;
+            ring: 0 !important;
+            color: #0bda7a !important; 
+            caret-color: #ec5b13 !important;
+            width: 100% !important; 
+            font-family: monospace, inherit !important; 
+            font-size: 0.875rem !important;
+            line-height: 1.25rem !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            backdrop-filter: none !important;
+            filter: none !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+        }
+
+        .terminal-input:-webkit-autofill,
+        .terminal-input:-webkit-autofill:hover, 
+        .terminal-input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #0bda7a !important;
+            -webkit-box-shadow: 0 0 0px 1000px #1a110c inset !important;
+            transition: background-color 5000s ease-in-out 0s !important;
+        }
+        .terminal-cursor { display: inline-block; width: 8px; height: 16px; background: #ec5b13; animation: blink 1s infinite; vertical-align: middle; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
         .grid-bg { background-image: radial-gradient(#ec5b1322 1px, transparent 1px); background-size: 32px 32px; }
         .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
         
-        /* Neural Cursor */
-        #neural-cursor { width: 32px; height: 32px; border: 2px solid #ec5b13; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.15s ease-out, width 0.3s, height 0.3s, background 0.3s; transform: translate(-50%, -50%); display: none; }
+        /* Neural Cursor - Crisp & Non-Blurry */
+        #neural-cursor { width: 32px; height: 32px; border: 2px solid #ec5b13; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.12s ease-out, width 0.25s, height 0.25s, background 0.25s, opacity 0.2s; transform: translate(-50%, -50%); display: none; }
         @media (pointer: fine) { #neural-cursor { display: block; } }
-        .cursor-hover #neural-cursor { width: 64px; height: 64px; background: rgba(236, 91, 19, 0.1); backdrop-filter: blur(4px); }
+        .cursor-hover #neural-cursor { width: 52px; height: 52px; background: rgba(236, 91, 19, 0.08); border: 2px solid rgba(236, 91, 19, 0.85); box-shadow: 0 0 15px rgba(236, 91, 19, 0.3); backdrop-filter: none !important; }
+        body.typing-active #neural-cursor,
+        body:has(#terminal-input:focus) #neural-cursor { opacity: 0 !important; }
 
-        /* Terminal Refinement */
-        .terminal-input { background: transparent; border: none; outline: none; color: #fff; width: 100%; font-family: inherit; }
-        .terminal-cursor { display: inline-block; width: 8px; height: 16px; background: #ec5b13; animation: blink 1s infinite; vertical-align: middle; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        /* Card Animations & Tactile Feel */
+        .project-card, .glass-card {
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+            transform-style: preserve-3d;
+            will-change: transform, box-shadow;
+            position: relative;
+        }
+        
+        .project-card:hover, .glass-card:hover {
+            box-shadow: 0 20px 45px -10px rgba(236, 91, 19, 0.25), 0 0 25px rgba(236, 91, 19, 0.12);
+        }
+
+        @keyframes card-click-ring {
+            0% { box-shadow: 0 0 0 0px rgba(236, 91, 19, 0.8), 0 0 30px rgba(236, 91, 19, 0.5); }
+            50% { box-shadow: 0 0 0 10px rgba(236, 91, 19, 0), 0 0 50px rgba(236, 91, 19, 0.7); }
+            100% { box-shadow: 0 0 0 0px rgba(236, 91, 19, 0), 0 10px 25px rgba(0, 0, 0, 0.1); }
+        }
+
+        .card-clicked { animation: card-click-ring 0.5s ease-out forwards !important; }
+        .card-pressed { transform: scale(0.96) translateY(2px) !important; transition: transform 0.08s cubic-bezier(0.4, 0, 0.2, 1) !important; }
+
+        /* Click Ripple Effect */
+        .card-ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(236, 91, 19, 0.45) 0%, rgba(236, 91, 19, 0) 70%);
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(0);
+            animation: ripple-grow 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            z-index: 10;
+        }
+
+        @keyframes ripple-grow {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(3.5); opacity: 0; }
+        }
 
         /* Neural Stream Background */
         #neural-stream { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; opacity: 0.4; }
@@ -167,8 +251,10 @@
 </div>
 <!-- Section 1: Cinematic Hero -->
 <section class="relative h-screen w-full flex items-center justify-center overflow-hidden bg-background-dark">
-<div class="absolute inset-0 z-0 opacity-40">
-<img class="w-full h-full object-cover" data-alt="A sprawling cinematic view of a futuristic digital landscape with glowing orange data streams and neural network nodes connecting in a dark cosmic void." src="/assets/neural_universe_hero_8k_1778748676966.png">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-60 filter brightness-110 contrast-125" data-alt="High definition 8K 3D orange neural network matrix background" src="/assets/orange_neural_universe_v4.png" onerror="this.src='/brain/orange_neural_universe_v4_1787048972596.png'">
+<div class="absolute inset-0 bg-gradient-to-b from-background-dark/60 via-background-dark/30 to-background-dark/85"></div>
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(34,22,16,0.5)_60%,rgba(15,10,7,0.9)_100%)]"></div>
 </div>
 <div class="z-10 text-center px-6">
 <p class="text-primary font-mono text-sm tracking-[0.3em] mb-4 uppercase">Coordinates: 23.2599° N, 77.4126° E</p>
@@ -183,8 +269,8 @@
 <span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
                     View Projects
                 </button>
-<button onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})" class="magnetic glass-card text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white/10 transition-colors flex items-center gap-2">
-<span class="material-symbols-outlined" data-icon="mail">mail</span>
+<button onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})" class="magnetic bg-black/40 backdrop-blur-md border border-white/20 hover:border-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-primary/20 hover:scale-105 transition-all flex items-center gap-2 shadow-lg hover:shadow-[0_0_25px_rgba(236,91,19,0.35)]">
+<span class="material-symbols-outlined text-primary" data-icon="mail">mail</span>
                     Get In Touch
                 </button>
 </div>
@@ -275,9 +361,9 @@
     </button>
 </div>
 </div>
-<div class="aspect-video bg-gray-200 rounded-2xl overflow-hidden shadow-2xl group cursor-pointer relative project-card">
+<div onclick="openProjectModal('TrustScope', 'PyTorch • Llama-2 • Risk-NLP', 'TrustScope addresses the critical problem of Human-AI trust calibration. By architecting an NLP pipeline that analyzes the delta between model confidence scores and human override frequency, we can quantify Trust Volatility. The system implements a sliding-window sentiment analysis on confidence notes to detect early skepticism. We deployed a custom risk-segmentation algorithm that segments users into three risk tiers, allowing system architects to identify and mitigate model mistrust before it leads to full system abandonment. Key metrics: 15% improvement in override prediction accuracy.', 'https://github.com/Mishra123456/ai-trust-insights', '/assets/trust_architecture_diagram_1778747282407.png')" class="aspect-video bg-gray-200 rounded-2xl overflow-hidden shadow-2xl group cursor-pointer relative project-card">
     <div class="scanning-overlay"></div>
-    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="..." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTS9AGmunz-18b71soyFLWkk7AqKc1_Q1FrCfRmBJJ845uXM32xDcpFT_gJClqyIfiS5-70jRczVWWBFvP4YB7FyeFZLtIJQ64e9ESlqoplIN0sVsbNv_ELeuDIXvK0RaXGH4H8K7VyUf5CocuaAUQpl4BOy7jOpgnkApt0UJP505m3YfIVHvUZem5MgG6sflsJmoZS31loRgvdKwa38MOPt8JuYn4uVUjRI9DiV3O6rjt_vOgjvO7yn3-52OGl8xSjy_BXQWt8dQ">
+    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="TrustScope Fairness and Bias Dashboard UI" src="/assets/trustscope_ui_v2.png" onerror="this.src='file:///C:/Users/user/.gemini/antigravity-ide/brain/f84b3140-3559-473e-b39e-72b9f9e01e35/media__1787049693108.png'">
 </div>
 </div>
 </div>
@@ -301,9 +387,9 @@
     </button>
 </div>
 </div>
-<div class="aspect-video bg-gray-200 rounded-2xl overflow-hidden shadow-2xl md:order-1 group cursor-pointer relative project-card">
+<div onclick="openProjectModal('DegradX', 'TensorFlow • Bi-LSTM • Scikit-Learn', 'DegradX is a predictive maintenance powerhouse that leverages a hybrid Bi-LSTM and Random Forest architecture. While Random Forest identifies high-impact sensor features, the Bi-LSTM captures temporal degradation signatures across vibration, temperature, and torque streams. We implemented consistent feature scaling and optimized a 20-cycle windowing strategy to predict Remaining Useful Life (RUL) with high precision. The system serves real-time health clustering and reliability metrics via an asynchronous FastAPI backbone, designed for low-latency IoT integration.', 'https://github.com/Mishra123456/degradix-health-hub-main', '/assets/degradx_architecture_diagram_1778747302134.png')" class="aspect-video bg-gray-200 rounded-2xl overflow-hidden shadow-2xl md:order-1 group cursor-pointer relative project-card">
     <div class="scanning-overlay"></div>
-    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="..." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtQ9CUEadSg-WkFMFMjQze1yRs7frdOJsV5PNSL7b-RvXoWZTNu1riMvDNUGbEFFYCwyIFmGqXzYxrsue9klL8w4n__b9RYR9dPdg1sJU38AXT_3OinSudRuMM3mVYDgNEPlxspeiFyKneel7EFGk8bC6z5Tt6AWelm7jpvjzi4FvdbeD8B7vuD4t1GG_rg-gdojtNeasM48dkXpya7umRcYMPWv6vhzBqhRhVEQV6xKT9S16FoWywbdM5MPrC8EAHj0LqquO1ktQ">
+    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="DegradX Machine Health Analysis Dashboard UI" src="/assets/degradx_ui_v2.png" onerror="this.src='file:///C:/Users/user/.gemini/antigravity-ide/brain/f84b3140-3559-473e-b39e-72b9f9e01e35/media__1787049384093.png'">
 </div>
 </div>
 </div>
@@ -328,9 +414,9 @@
     </button>
 </div>
 </div>
-<div class="aspect-video bg-gray-200 rounded-2xl overflow-hidden shadow-2xl group cursor-pointer relative project-card">
+<div onclick="openProjectModal('Emotion AI', 'Vision Transformers • FastAPI • Generative UI', 'Emotion AI pushes the boundaries of affective computing by using Vision Transformers (ViT) to process facial expressions as high-dimensional emotional patches. This architecture achieves superior robustness against lighting noise compared to traditional CNNs. The system maps detected expressions across 7 emotional states to a procedural HSL color engine, generating dynamic 1920x1080 wallpapers in real-time. This creates an immersive generative UI that physically reflects the user’s affective state, served via a high-performance image-streaming endpoint.', 'https://github.com/Mishra123456/EMOTION_WALLPAPER', '/assets/emotion_ai_architecture_diagram_1778747326401.png')" class="aspect-video bg-gray-200 rounded-2xl overflow-hidden shadow-2xl group cursor-pointer relative project-card">
     <div class="scanning-overlay"></div>
-    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Emotion AI Wallpaper Interface" src="/assets/emotion_ai_wallpaper_demo_1778747258818.png">
+    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Emotion AI MoodCraft UI" src="/assets/emotion_ai_ui_v2.png" onerror="this.src='file:///C:/Users/user/.gemini/antigravity-ide/brain/f84b3140-3559-473e-b39e-72b9f9e01e35/media__1787049549912.png'">
 </div>
 </div>
 </div>
@@ -425,59 +511,96 @@
 <h2 class="text-4xl font-black">Certifications Vault</h2>
 </div>
 <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6">
-<div class="group h-64 [perspective:1000px]">
+<!-- IBM Card -->
+<div class="group h-64 [perspective:1000px] cursor-pointer">
 <div class="relative h-full w-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-<div class="absolute inset-0 glass-card rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-lg">
-<img class="w-16 h-16 mb-4" data-alt="Official IBM logo in blue, rendered as a crisp digital icon for a certification badge. The style is professional and corporate, set against a clean white and light orange gradient background that feels prestigious and validated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_dXAYNNO-DDPcen6R94JF-pXP2W9i-g6Yz5uSTFo9BAfkSV9efl6WF9ADlMT-pf2wVY6pDP2DkNpjI93HaZBLOEGpV-YUb6d5EjPGu3ZGXQ0KvhFWdSjO1x79-5qWfglc5pkvEEOYLMEhkq30e71lRYWsZMm3Rb1k4ysn95fW_Z81gR0J7pN29ZMR_a2vDA1CwAuf681e6vA6K8BhHdieWsL0a0uczriDVrXlGVvYPji7hQkXxDr4pCqwYW0Z0KHOoAlWh4BseVE">
-<p class="font-bold">IBM</p>
-<p class="text-xs text-gray-500 uppercase">Data Engineering</p>
+<div class="absolute inset-0 glass-card bg-white/95 border border-primary/20 group-hover:border-primary/60 rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-lg group-hover:shadow-2xl transition-all">
+<div class="w-16 h-16 mb-4 flex items-center justify-center bg-blue-50 border border-blue-100 rounded-xl p-3">
+<svg class="w-full h-full text-[#1F70C1]" viewBox="0 0 100 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 4H30V9H0V4ZM0 14H30V19H0V14ZM0 24H30V29H0V24ZM0 34H30V39H0V34Z" fill="#1F70C1"/>
+<path d="M35 4H65V9H35V4ZM35 14H65V19H35V14ZM35 24H65V29H35V24ZM35 34H65V39H35V34Z" fill="#1F70C1"/>
+<path d="M70 4H100V9H70V4ZM70 14H100V19H70V14ZM70 24H100V29H70V24ZM70 34H100V39H70V34Z" fill="#1F70C1"/>
+</svg>
 </div>
-<div class="absolute inset-0 h-full w-full rounded-2xl bg-primary px-6 py-12 text-center text-white [backface-visibility:hidden] [transform:rotateY(180deg)]">
-<p class="text-sm font-bold mb-2">Verified Professional</p>
-<p class="text-xs">Issued Dec 2023</p>
-<a href="https://drive.google.com/file/d/1kKAQ9mAFTsEXIGp5DFuWySPFNnCymlXN/view?usp=sharing" target="_blank" class="mt-4 text-xs underline block">VIEW CERTIFICATE</a>
+<p class="font-bold text-lg text-background-dark">IBM</p>
+<p class="text-xs text-primary font-mono font-bold uppercase tracking-wider mt-1">Data Engineering</p>
+</div>
+<div class="absolute inset-0 h-full w-full rounded-2xl bg-gradient-to-br from-primary via-[#b8420b] to-background-dark px-6 py-8 text-center text-white [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col items-center justify-center border border-primary/40 shadow-2xl">
+<p class="text-base font-bold mb-1">Verified Professional</p>
+<p class="text-xs text-white/80">Issued Dec 2023</p>
+<a href="https://drive.google.com/file/d/1kKAQ9mAFTsEXIGp5DFuWySPFNnCymlXN/view?usp=sharing" target="_blank" class="mt-5 px-5 py-2 bg-white/15 hover:bg-white/30 border border-white/30 rounded-full text-xs font-bold transition-all text-white flex items-center gap-1">
+VIEW CERTIFICATE <span class="material-symbols-outlined text-xs">open_in_new</span>
+</a>
 </div>
 </div>
 </div>
-<div class="group h-64 [perspective:1000px]">
+
+<!-- Microsoft Card -->
+<div class="group h-64 [perspective:1000px] cursor-pointer">
 <div class="relative h-full w-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-<div class="absolute inset-0 glass-card rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-lg">
-<img class="w-16 h-16 mb-4" data-alt="Official Microsoft logo in its four-color square format, rendered for a high-level certification badge. The aesthetic is clean and modern, highlighting technical expertise and cloud architecture proficiency in a professional UI environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4Tkbr4mnQEXTyrKN0auS48TRy1pvIleLdEYgXfGo9ItdmbZyyD1PXizBy6QCzrtZKcWSVCbwmfOBjozBNGzpOSB5FyvHYT0oyIutlh167wpIQR3whCOg3VfyWsUjy9C8gtrhn1y_nqzbftlXZY4UbtstmU1WAYEf-GhO1kF9egzlwiIvyYZgh8Qe_JGkGQHyLp1_rwwfdJ06evJP4QCUpinSTZ9rK7xxAU0PIBTHucepXyT7_k1-Vd8_Lt9wuWTso-PxMpGLXwpg">
-<p class="font-bold">Microsoft</p>
-<p class="text-xs text-gray-500 uppercase">Azure Data Fund.</p>
+<div class="absolute inset-0 glass-card bg-white/95 border border-primary/20 group-hover:border-primary/60 rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-lg group-hover:shadow-2xl transition-all">
+<div class="w-16 h-16 mb-4 flex items-center justify-center bg-gray-50 border border-gray-100 rounded-xl p-3">
+<svg class="w-10 h-10" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0" y="0" width="11" height="11" fill="#F25022"/>
+<rect x="12" y="0" width="11" height="11" fill="#7FBA00"/>
+<rect x="0" y="12" width="11" height="11" fill="#00A4EF"/>
+<rect x="12" y="12" width="11" height="11" fill="#FFB900"/>
+</svg>
 </div>
-<div class="absolute inset-0 h-full w-full rounded-2xl bg-primary px-6 py-12 text-center text-white [backface-visibility:hidden] [transform:rotateY(180deg)]">
-<p class="text-sm font-bold mb-2">Verified Professional</p>
-<p class="text-xs">Score: 970/1000</p>
-<a href="https://drive.google.com/file/d/1NM-XxTw2ETm0yjhhb3ioWON0o9KGugsV/view?usp=sharing" target="_blank" class="mt-4 text-xs underline block">VIEW CERTIFICATE</a>
+<p class="font-bold text-lg text-background-dark">Microsoft</p>
+<p class="text-xs text-primary font-mono font-bold uppercase tracking-wider mt-1">Azure Data Fund.</p>
+</div>
+<div class="absolute inset-0 h-full w-full rounded-2xl bg-gradient-to-br from-primary via-[#b8420b] to-background-dark px-6 py-8 text-center text-white [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col items-center justify-center border border-primary/40 shadow-2xl">
+<p class="text-base font-bold mb-1">Verified Professional</p>
+<p class="text-xs text-white/80">Score: 970/1000</p>
+<a href="https://drive.google.com/file/d/1NM-XxTw2ETm0yjhhb3ioWON0o9KGugsV/view?usp=sharing" target="_blank" class="mt-5 px-5 py-2 bg-white/15 hover:bg-white/30 border border-white/30 rounded-full text-xs font-bold transition-all text-white flex items-center gap-1">
+VIEW CERTIFICATE <span class="material-symbols-outlined text-xs">open_in_new</span>
+</a>
 </div>
 </div>
 </div>
-<div class="group h-64 [perspective:1000px]">
+
+<!-- Oracle Card -->
+<div class="group h-64 [perspective:1000px] cursor-pointer">
 <div class="relative h-full w-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-<div class="absolute inset-0 glass-card rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-lg">
-<img class="w-16 h-16 mb-4" data-alt="The Oracle corporation logo in its signature red font, displayed on a minimalist digital badge representing professional certification. The visual style is crisp, high-resolution, and formal, set against a background of soft orange and white tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcXyIifBFJiZW6y3fWtYAVRoLMkikxqKSdWd9kNVT0_2ioeIGnV8r4Ymw7bYrCQNPCQIumbHnY41rwZcmeaz8aVkKmATcyJG7snjxQYqBAGm9JcuzBHdy1lvklfQvtpSTpQm_HqvosVZjv-lBS3a9cvWuw0zr87knKNUiQZ7xscTPn48TFLnuCJj8p6_JEJuU618ZfXdPNlx6OO8IsXwaAYd-MziIa7HxHqoXP1qb9SdAXcf_2FrklqkBnZkpDVqQWN8Mkck-Stdk">
-<p class="font-bold">Oracle</p>
-<p class="text-xs text-gray-500 uppercase">SQL Specialist</p>
+<div class="absolute inset-0 glass-card bg-white/95 border border-primary/20 group-hover:border-primary/60 rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-lg group-hover:shadow-2xl transition-all">
+<div class="w-16 h-16 mb-4 flex items-center justify-center bg-red-50 border border-red-100 rounded-xl p-3">
+<svg class="w-12 h-8" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M30 4C15.636 4 4 11.163 4 20C4 28.837 15.636 36 30 36C44.364 36 56 28.837 56 20C56 11.163 44.364 4 30 4ZM30 29.333C21.164 29.333 14 25.154 14 20C14 14.846 21.164 10.667 30 10.667C38.836 10.667 46 14.846 46 20C46 25.154 38.836 29.333 30 29.333Z" fill="#EA1C24"/>
+<path d="M90 4C75.636 4 64 11.163 64 20C64 28.837 75.636 36 90 36C104.364 36 116 28.837 116 20C116 11.163 104.364 4 90 4ZM90 29.333C81.164 29.333 74 25.154 74 20C74 14.846 81.164 10.667 90 10.667C98.836 10.667 106 14.846 106 20C106 25.154 98.836 29.333 90 29.333Z" fill="#EA1C24"/>
+</svg>
 </div>
-<div class="absolute inset-0 h-full w-full rounded-2xl bg-primary px-6 py-12 text-center text-white [backface-visibility:hidden] [transform:rotateY(180deg)]">
-<p class="text-sm font-bold mb-2">Verified Professional</p>
-<p class="text-xs">Advanced SQL Series</p>
-<a href="https://drive.google.com/file/d/1mPWcbBamyrDWhxU_MvgbVYW_cryhbYyf/view?usp=sharing" target="_blank" class="mt-4 text-xs underline block">VIEW CERTIFICATE</a>
+<p class="font-bold text-lg text-background-dark">Oracle</p>
+<p class="text-xs text-primary font-mono font-bold uppercase tracking-wider mt-1">Data Science</p>
+</div>
+<div class="absolute inset-0 h-full w-full rounded-2xl bg-gradient-to-br from-primary via-[#b8420b] to-background-dark px-6 py-8 text-center text-white [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col items-center justify-center border border-primary/40 shadow-2xl">
+<p class="text-base font-bold mb-1">Verified Professional</p>
+<p class="text-xs text-white/80">Data Science Certification</p>
+<a href="https://drive.google.com/file/d/1mPWcbBamyrDWhxU_MvgbVYW_cryhbYyf/view?usp=sharing" target="_blank" class="mt-5 px-5 py-2 bg-white/15 hover:bg-white/30 border border-white/30 rounded-full text-xs font-bold transition-all text-white flex items-center gap-1">
+VIEW CERTIFICATE <span class="material-symbols-outlined text-xs">open_in_new</span>
+</a>
 </div>
 </div>
 </div>
-<div class="group h-64 [perspective:1000px]">
+
+<!-- NPTEL Card -->
+<div class="group h-64 [perspective:1000px] cursor-pointer">
 <div class="relative h-full w-full transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-<div class="absolute inset-0 glass-card rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-lg">
-<img class="w-16 h-16 mb-4" data-alt="The NPTEL logo representing Indian engineering academic excellence, presented on a digital certificate icon. The styling is clean and educational, using corporate blues and whites to signify deep technical learning and certification." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOgHuYhyXfCW6Z4EY3yh7ZmEXfqZ-L-t0LskWsUEkNqxhAC6z1ozdhZOAl2MAJydhE7gshsgbY2LZ_rxqLLNEc4OjksKDf_bHf7uH-CW9pWaNw16G7__jT5CiL30zb0Chod6-24Jpfjc6RbhSA2nqT9hICxFtGrRdk_fSiM6VxKsklS0vAO2AGzStTpezvk6RixS7tamD7AcLzrVjBLdSsGZOgGidhdKOpNBb4OvkplJjYNBPkZMLHPJP_f1et_ENhcltmAt5pD3M">
-<p class="font-bold">NPTEL</p>
-<p class="text-xs text-gray-500 uppercase">AI &amp; Ethics</p>
+<div class="absolute inset-0 glass-card bg-white/95 border border-primary/20 group-hover:border-primary/60 rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-lg group-hover:shadow-2xl transition-all">
+<div class="w-16 h-16 mb-4 flex items-center justify-center bg-orange-50 border border-orange-100 rounded-xl p-3">
+<svg class="w-10 h-10 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+</svg>
 </div>
-<div class="absolute inset-0 h-full w-full rounded-2xl bg-primary px-6 py-12 text-center text-white [backface-visibility:hidden] [transform:rotateY(180deg)]">
-<p class="text-sm font-bold mb-2">Gold Medalist</p>
-<p class="text-xs">Top 1% Percentile</p>
-<a href="https://drive.google.com/file/d/1A-uvjbefRWpnLHPG3TUCf3ot82CmcZw7/view?usp=sharing" target="_blank" class="mt-4 text-xs underline block">VIEW CERTIFICATE</a>
+<p class="font-bold text-lg text-background-dark">NPTEL</p>
+<p class="text-xs text-primary font-mono font-bold uppercase tracking-wider mt-1">Cloud Computing</p>
+</div>
+<div class="absolute inset-0 h-full w-full rounded-2xl bg-gradient-to-br from-primary via-[#b8420b] to-background-dark px-6 py-8 text-center text-white [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col items-center justify-center border border-primary/40 shadow-2xl">
+<p class="text-base font-bold mb-1">Verified Professional</p>
+<p class="text-xs text-white/80">Cloud Computing Certification</p>
+<a href="https://drive.google.com/file/d/1A-uvjbefRWpnLHPG3TUCf3ot82CmcZw7/view?usp=sharing" target="_blank" class="mt-5 px-5 py-2 bg-white/15 hover:bg-white/30 border border-white/30 rounded-full text-xs font-bold transition-all text-white flex items-center gap-1">
+VIEW CERTIFICATE <span class="material-symbols-outlined text-xs">open_in_new</span>
+</a>
 </div>
 </div>
 </div>
@@ -752,7 +875,7 @@
 </div>
 <div class="bg-black/20 p-4 border-t border-white/5 flex gap-2 font-mono text-sm">
 <span class="text-primary">mukul@system:~$</span>
-<input type="text" id="terminal-input" class="terminal-input" autofocus autocomplete="off">
+<input type="text" id="terminal-input" class="terminal-input bg-transparent text-[#0bda7a] border-none outline-none focus:outline-none focus:ring-0 focus:border-transparent focus:bg-transparent p-0 m-0 w-full font-mono shadow-none" autofocus autocomplete="off" spellcheck="false">
 </div>
 </div>
 </div>
@@ -904,9 +1027,15 @@ document.getElementById('contactForm').addEventListener('submit', async function
         el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
     });
 
-    // Terminal Logic
+    // Terminal Logic & Blur Removal
     const terminalInput = document.getElementById('terminal-input');
     const terminalOutput = document.getElementById('terminal-output');
+
+    if (terminalInput) {
+        terminalInput.addEventListener('focus', () => document.body.classList.add('typing-active'));
+        terminalInput.addEventListener('blur', () => document.body.classList.remove('typing-active'));
+        terminalInput.addEventListener('input', () => document.body.classList.add('typing-active'));
+    }
 
     const commands = {
         help: () => 'Available commands: whoami, skills, projects, contact, clear, status, secret',
@@ -1113,20 +1242,51 @@ document.getElementById('contactForm').addEventListener('submit', async function
         document.getElementById('project-modal').classList.add('hidden');
     };
 
-    // 6. 3D Tilt Effect
+    // 6. Refined Card Hover & Tactile Click Animation Engine
     document.querySelectorAll('.project-card, .glass-card').forEach(el => {
         el.addEventListener('mousemove', (e) => {
+            if (el.classList.contains('card-pressed')) return;
             const rect = el.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            const rotateX = (y - centerY) / 10;
-            const rotateY = (centerX - x) / 10;
-            el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            // Elegant +/- 3deg micro-tilt with smooth 3D parallax depth, no harsh slanting
+            const rotateX = ((centerY - y) / centerY) * 3;
+            const rotateY = ((x - centerX) / centerX) * 3;
+            el.style.transform = `perspective(1000px) translateY(-6px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(1.015)`;
         });
+
         el.addEventListener('mouseleave', () => {
-            el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+            el.classList.remove('card-pressed');
+            el.style.transform = `perspective(1000px) translateY(0px) rotateX(0deg) rotateY(0deg) scale(1)`;
+        });
+
+        el.addEventListener('mousedown', (e) => {
+            el.classList.add('card-pressed');
+            
+            // Create sleek expanding ripple element at click position
+            const rect = el.getBoundingClientRect();
+            const ripple = document.createElement('span');
+            ripple.className = 'card-ripple';
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${e.clientX - rect.left}px`;
+            ripple.style.top = `${e.clientY - rect.top}px`;
+            
+            el.querySelectorAll('.card-ripple').forEach(r => r.remove());
+            el.appendChild(ripple);
+
+            // Audio click feedback
+            if (typeof playSound === 'function') playSound(1200, 'sine', 0.08, 0.04);
+        });
+
+        el.addEventListener('mouseup', () => {
+            el.classList.remove('card-pressed');
+            el.classList.remove('card-clicked');
+            void el.offsetWidth; // Trigger reflow for CSS animation restart
+            el.classList.add('card-clicked');
+            setTimeout(() => el.classList.remove('card-clicked'), 500);
         });
     });
 
